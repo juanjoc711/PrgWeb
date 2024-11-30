@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Asociaciones</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Sistema de Asociaciones</h1>
+
+  <!-- Login -->
+  <section id="login">
+    <h2>Iniciar Sesión</h2>
+    <form id="login-form">
+        <input type="text" id="username" placeholder="Usuario" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
+        <button type="submit">Login</button>
+      </form>      
+    <p id="login-error" style="color: red; display: none;">Error de autenticación</p>
+  </section>
+
+  <!-- Crear Asociación -->
+  <section id="create-association" style="display: none;">
+    <h2>Crear Asociación</h2>
+    <form id="create-form">
+      <input type="text" id="association-name" placeholder="Nombre" required />
+      <input type="text" id="association-description" placeholder="Descripción" required />
+      <button type="submit">Crear</button>
+    </form>
+  </section>
+
+  <!-- Listar Asociaciones -->
+  <section id="list-associations" style="display: none;">
+    <h2>Lista de Asociaciones</h2>
+    <ul id="associations-list"></ul>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
