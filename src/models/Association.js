@@ -7,3 +7,4 @@ const associationSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('Association', associationSchema);
+
