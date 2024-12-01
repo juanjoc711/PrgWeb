@@ -1,6 +1,6 @@
 import { register, login } from "./auth/auth.js";
 import { changeUsername, changePassword } from "./components/account/account.js"; 
-import { fetchAssociations, fetchMyAssociations, createAssociation } from "./components/associations/associations.js";
+import { fetchAssociations, fetchMyAssociations, createAssociation, searchAssociations } from "./components/associations/associations.js";
 import { switchView, setToken } from "./utils/utils.js"; 
 
 
@@ -91,4 +91,13 @@ document.getElementById("my-associations-button").addEventListener("click", () =
 
 document.getElementById("back-to-associations").addEventListener("click", () => {
   switchView("associations-view"); // Cambia a la vista de asociaciones principales
+});
+
+document.getElementById("search-bar").addEventListener("input", (e) => {
+  const query = e.target.value.trim();
+  if (query) {
+      searchAssociations(query);
+  } else {
+      fetchAssociations(); // Mostrar todas las asociaciones si el campo está vacío
+  }
 });

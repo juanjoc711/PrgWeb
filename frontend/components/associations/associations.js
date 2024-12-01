@@ -109,3 +109,22 @@ export async function createAssociation(name, description) {
     console.error("Error al crear la asociación:", error);
   }
 }
+
+//buscar asociacion por nombre
+
+export async function searchAssociations(query) {
+  try {
+      const res = await fetch(`http://localhost:3000/associations/search?query=${query}`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+      });
+
+      if (res.ok) {
+          const associations = await res.json();
+          renderAssociationsTable(associations, await fetchMyAssociations(false)); // Renderiza resultados
+      } else {
+          console.error("Error al buscar asociaciones: ", res.status);
+      }
+  } catch (error) {
+      console.error("Error al buscar asociaciones:", error);
+  }
+}

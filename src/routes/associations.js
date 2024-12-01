@@ -6,7 +6,8 @@ const {
     deleteAssociation, 
     joinAssociation, 
     leaveAssociation, 
-    myAssociations 
+    myAssociations,
+    searchAssociations,
 } = require('../controllers/associationController');
 const authenticateToken = require('../middleware/auth');
 
@@ -25,4 +26,6 @@ router.post('/:id/join', joinAssociation);
 router.post('/:id/leave', leaveAssociation);
 router.get('/my', myAssociations);
 
+//Buscar asociacion por nombre
+router.get('/search', searchAssociations);
 module.exports = router;

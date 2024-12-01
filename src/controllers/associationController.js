@@ -122,3 +122,16 @@ exports.myAssociations = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+// Buscar asociaciones por nombre
+exports.searchAssociations = async (req, res) => {
+    const { query } = req.query; // Captura el parámetro de búsqueda
+    try {
+        const associations = await Association.find({
+            name: { $regex: query, $options: 'i' } // Búsqueda insensible a mayúsculas/minúsculas
+        });
+        res.status(200).json(associations);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

@@ -35,31 +35,36 @@
   <!-- Vista de Asociaciones -->
   <section id="associations-view" style="display: none;">
     <div id="create-button-container" style="display: none;">
-      <button id="create-button">Crear Asociación</button>
+        <button id="create-button">Crear Asociación</button>
     </div>
     <header>
-      <div id="user-menu">
-        <span id="user-icon">👤</span>
-        <div id="user-dropdown" style="display: none;">
-          <button id="admin-button">Administración</button>
-          <button id="my-associations-button">Mis Asociaciones</button>
-          <button id="logout-button">Cerrar Sesión</button>
+        <div id="user-menu">
+            <span id="user-icon">👤</span>
+            <div id="user-dropdown" style="display: none;">
+                <button id="admin-button">Administración</button>
+                <button id="my-associations-button">Mis Asociaciones</button>
+                <button id="logout-button">Cerrar Sesión</button>
+            </div>
         </div>
-      </div>
     </header>
 
+    <!-- Barra de búsqueda -->
+    <div id="search-container">
+        <input type="text" id="search-bar" placeholder="Buscar asociaciones..." />
+    </div>
+
     <table id="associations-table">
-      <thead>
-        <tr>
-          <th>Logo</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="associations-body"></tbody>
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="associations-body"></tbody>
     </table>
-  </section>
+</section>
   <!-- Administración de Cuenta -->
   <section id="account-management" style="display: none;">
     <h2>Administración de Cuenta</h2>
