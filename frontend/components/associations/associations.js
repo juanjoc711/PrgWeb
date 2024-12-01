@@ -1,6 +1,8 @@
-import { getToken } from "./utils.js";
+import { getToken } from '../../utils/utils.js';
+import { renderAssociationsTable } from './renderAssociationsTable.js';
+import { renderMyAssociationsTable } from './renderMyAssociationsTable.js';
 
-export async function fetchAssociations() {
+export async function fetchAssociations(myAssociations = null) {
   try {
     const res = await fetch(`http://localhost:3000/associations`, {
       headers: { Authorization: `Bearer ${getToken()}` },
@@ -8,7 +10,11 @@ export async function fetchAssociations() {
 
     if (res.ok) {
       const associations = await res.json();
-      const myAssociations = await fetchMyAssociations(false); // Obtener asociaciones del usuario sin renderizar
+      if (!myAssociations) {
+        myAssociations = await fetchMyAssociations(false); // Solo IDs
+      }
+      console.log("Asociaciones obtenidas:", associations);
+      console.log("Mis asociaciones actualizadas:", myAssociations);
       renderAssociationsTable(associations, myAssociations);
     } else {
       console.error("Error al obtener las asociaciones: ", res.status);
@@ -45,7 +51,15 @@ export async function leaveAssociation(associationId) {
 
     if (res.ok) {
       alert("Has abandonado la asociación");
-      fetchAssociations();
+
+      const currentView = document.querySelector("section[style='display: block;']").id;
+
+      if (currentView === "my-associations-view") {
+        fetchMyAssociations(); // Refrescar tabla de "Mis Asociaciones"
+      } else {
+        const myAssociations = await fetchMyAssociations(false);
+        fetchAssociations(myAssociations); // Refrescar vista principal
+      }
     } else {
       alert("Error al abandonar la asociación");
     }
@@ -62,50 +76,16 @@ export async function fetchMyAssociations(render = true) {
 
     if (res.ok) {
       const associations = await res.json();
-      if (render) renderAssociationsTable(associations, associations);
-      return associations.map((assoc) => assoc._id); // Retornar solo los IDs
+      if (render) {
+        renderMyAssociationsTable(associations);
+      }
+      return associations.map((assoc) => assoc._id); // IDs para uso interno
+    } else {
+      console.error("Error al obtener tus asociaciones:", res.status);
     }
   } catch (error) {
     console.error("Error al obtener tus asociaciones:", error);
   }
-}
-
-function renderAssociationsTable(associations, myAssociations) {
-  const tableBody = document.getElementById("associations-body");
-  tableBody.innerHTML = "";
-
-  associations.forEach((assoc) => {
-    const row = document.createElement("tr");
-
-    const logoCell = document.createElement("td");
-    logoCell.textContent = "📷";
-    row.appendChild(logoCell);
-
-    const nameCell = document.createElement("td");
-    nameCell.textContent = assoc.name;
-    row.appendChild(nameCell);
-
-    const descCell = document.createElement("td");
-    descCell.textContent = assoc.description;
-    row.appendChild(descCell);
-
-    const actionCell = document.createElement("td");
-
-    if (myAssociations.includes(assoc._id)) {
-      const leaveButton = document.createElement("button");
-      leaveButton.textContent = "Abandonar";
-      leaveButton.onclick = () => leaveAssociation(assoc._id);
-      actionCell.appendChild(leaveButton);
-    } else {
-      const joinButton = document.createElement("button");
-      joinButton.textContent = "Unirse";
-      joinButton.onclick = () => joinAssociation(assoc._id);
-      actionCell.appendChild(joinButton);
-    }
-
-    row.appendChild(actionCell);
-    tableBody.appendChild(row);
-  });
 }
 
 export async function createAssociation(name, description) {

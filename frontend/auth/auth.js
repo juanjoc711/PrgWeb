@@ -1,49 +1,46 @@
-import { setToken, getToken } from "./utils.js";
+import { setToken, getToken } from "../utils/utils.js";
 
 export async function register(username, password) {
-  try {
-    const res = await fetch(`http://localhost:3000/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (res.ok) {
-      alert("Usuario registrado con éxito");
-      document.getElementById("register").style.display = "none";
-      document.getElementById("login").style.display = "block";
-    } else {
-      alert("Error al registrarse");
+    try {
+      const res = await fetch('http://localhost:3000/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      if (res.ok) {
+        alert('Usuario registrado con éxito');
+      } else {
+        const error = await res.text();
+        alert(`Error al registrar: ${error}`);
+      }
+    } catch (error) {
+      console.error('Error al registrarse:', error);
     }
-  } catch (error) {
-    console.error("Error al registrarse:", error);
   }
-}
-
-export async function login(username, password, callback) {
-  try {
-    const res = await fetch(`http://localhost:3000/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setToken(data.token); // Guardar el token
-      alert("Login exitoso");
-      callback();
-    } else {
-      const loginError = document.getElementById("login-error");
-      loginError.style.display = "block";
-      loginError.innerText = "Usuario o contraseña incorrectos";
+  
+  export async function login(username, password, callback) {
+    try {
+      const res = await fetch(`http://localhost:3000/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      if (res.ok) {
+        const data = await res.json();
+        setToken(data.token); 
+        alert("Login exitoso");
+        callback();
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
-  } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    alert("Hubo un problema al conectarse con el servidor.");
   }
-}
-
+  
+  
 
 export async function changeUsername(newUsername) {
     try {

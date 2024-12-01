@@ -11,7 +11,7 @@
   }
   
   export function switchView(viewId) {
-    const views = ["login", "register", "associations-view", "account-management"];
+    const views = ["login", "register", "associations-view", "account-management", "my-associations-view"];
     views.forEach((id) => {
       document.getElementById(id).style.display = id === viewId ? "block" : "none";
     });

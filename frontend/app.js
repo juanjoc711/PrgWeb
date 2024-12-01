@@ -1,7 +1,7 @@
-import { register, login } from "./auth.js";
-import { changeUsername, changePassword } from "./account.js"; 
-import { fetchAssociations, fetchMyAssociations, createAssociation } from "./associations.js";
-import { switchView, setToken } from "./utils.js"; 
+import { register, login } from "./auth/auth.js";
+import { changeUsername, changePassword } from "./components/account/account.js"; 
+import { fetchAssociations, fetchMyAssociations, createAssociation } from "./components/associations/associations.js";
+import { switchView, setToken } from "./utils/utils.js"; 
 
 
 
@@ -84,6 +84,11 @@ document.getElementById("logout-button").addEventListener("click", () => {
 });
 
 document.getElementById("my-associations-button").addEventListener("click", () => {
-  fetchMyAssociations(); // Asegúrate de que esta función esté bien definida
-  switchView("my-associations-view"); // Cambia a una vista específica para "Mis Asociaciones"
+  fetchMyAssociations(); // Llama a la función para obtener las asociaciones
+  switchView("my-associations-view"); // Cambia a la vista de "Mis Asociaciones"
+});
+
+
+document.getElementById("back-to-associations").addEventListener("click", () => {
+  switchView("associations-view"); // Cambia a la vista de asociaciones principales
 });
