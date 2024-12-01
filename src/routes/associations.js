@@ -1,3 +1,5 @@
+const checkRole = require('../middleware/checkRole');
+
 const express = require('express');
 const { 
     createAssociation, 
@@ -29,3 +31,6 @@ router.get('/my', myAssociations);
 //Buscar asociacion por nombre
 router.get('/search', searchAssociations);
 module.exports = router;
+
+//Borrar asociaciones para los admin
+router.delete('/:id', authenticateToken, checkRole('admin'), deleteAssociation);

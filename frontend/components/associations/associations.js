@@ -2,6 +2,7 @@ import { getToken } from '../../utils/utils.js';
 import { renderAssociationsTable } from './renderAssociationsTable.js';
 import { renderMyAssociationsTable } from './renderMyAssociationsTable.js';
 
+
 export async function fetchAssociations(myAssociations = null) {
   try {
     const res = await fetch(`http://localhost:3000/associations`, {
@@ -10,12 +11,16 @@ export async function fetchAssociations(myAssociations = null) {
 
     if (res.ok) {
       const associations = await res.json();
+
+      // Si no se pasa `myAssociations`, obtén los IDs actualizados
       if (!myAssociations) {
-        myAssociations = await fetchMyAssociations(false); // Solo IDs
+        myAssociations = (await fetchMyAssociations(false)).map((assoc) => assoc._id);
       }
+
       console.log("Asociaciones obtenidas:", associations);
       console.log("Mis asociaciones actualizadas:", myAssociations);
-      renderAssociationsTable(associations, myAssociations);
+
+      renderAssociationsTable(associations, myAssociations); // Renderiza correctamente
     } else {
       console.error("Error al obtener las asociaciones: ", res.status);
     }
@@ -23,6 +28,9 @@ export async function fetchAssociations(myAssociations = null) {
     console.error("Error al obtener las asociaciones:", error);
   }
 }
+
+
+
 
 export async function joinAssociation(associationId) {
   try {
@@ -52,13 +60,16 @@ export async function leaveAssociation(associationId) {
     if (res.ok) {
       alert("Has abandonado la asociación");
 
+      // Obtener solo IDs actualizados de "Mis Asociaciones"
+      const myAssociations = (await fetchMyAssociations(false)).map((assoc) => assoc._id);
+
+      // Actualizar las vistas
       const currentView = document.querySelector("section[style='display: block;']").id;
 
       if (currentView === "my-associations-view") {
-        fetchMyAssociations(); // Refrescar tabla de "Mis Asociaciones"
+        renderMyAssociationsTable(await fetchMyAssociations(false)); // Refresca "Mis Asociaciones"
       } else {
-        const myAssociations = await fetchMyAssociations(false);
-        fetchAssociations(myAssociations); // Refrescar vista principal
+        await fetchAssociations(myAssociations); // Actualiza la vista principal con los IDs actualizados
       }
     } else {
       alert("Error al abandonar la asociación");
@@ -68,6 +79,7 @@ export async function leaveAssociation(associationId) {
   }
 }
 
+
 export async function fetchMyAssociations(render = true) {
   try {
     const res = await fetch(`http://localhost:3000/associations/my`, {
@@ -76,17 +88,22 @@ export async function fetchMyAssociations(render = true) {
 
     if (res.ok) {
       const associations = await res.json();
-      if (render) {
-        renderMyAssociationsTable(associations);
-      }
-      return associations.map((assoc) => assoc._id); // IDs para uso interno
+      console.log("Asociaciones devueltas del backend:", associations);
+
+      if (render) renderMyAssociationsTable(associations); // Renderizar correctamente
+
+      return associations; // Devuelve los datos correctamente
     } else {
       console.error("Error al obtener tus asociaciones:", res.status);
+      return [];
     }
   } catch (error) {
     console.error("Error al obtener tus asociaciones:", error);
+    return [];
   }
 }
+
+
 
 export async function createAssociation(name, description) {
   try {
@@ -126,5 +143,30 @@ export async function searchAssociations(query) {
       }
   } catch (error) {
       console.error("Error al buscar asociaciones:", error);
+  }
+}
+
+//elimninar asociaciones
+export async function deleteAssociation(associationId) {
+  try {
+    const res = await fetch(`http://localhost:3000/associations/${associationId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${getToken()}` },
+    });
+
+    if (res.ok) {
+      alert("Asociación eliminada con éxito");
+
+      // Actualizar ambas vistas
+      const myAssociations = await fetchMyAssociations(false); // Obtiene las asociaciones actualizadas
+      renderMyAssociationsTable(myAssociations);
+
+      // Refresca la tabla de asociaciones principales con IDs actualizados
+      await fetchAssociations(myAssociations.map((assoc) => assoc._id));
+    } else {
+      alert("Error al eliminar la asociación");
+    }
+  } catch (error) {
+    console.error("Error al eliminar la asociación:", error);
   }
 }

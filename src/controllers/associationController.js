@@ -50,23 +50,30 @@ exports.updateAssociation = async (req, res) => {
 };
 
 // Eliminar una asociación
+
 exports.deleteAssociation = async (req, res) => {
     try {
         const association = await Association.findById(req.params.id);
+
         if (!association) {
-            return res.status(404).send('Asociación no encontrada');
+            return res.status(404).json({ error: 'Asociación no encontrada' });
         }
 
+        // Verificar permisos (admin o creador)
         if (req.user.role !== 'admin' && association.createdBy.toString() !== req.user.id) {
-            return res.status(403).send('No tienes permisos para eliminar esta asociación');
+            return res.status(403).json({ error: 'No tienes permisos para eliminar esta asociación' });
         }
 
-        await association.remove();
-        res.status(200).send('Asociación eliminada correctamente');
+        // Eliminar la asociación usando deleteOne()
+        await association.deleteOne();
+
+        res.status(200).json({ message: 'Asociación eliminada correctamente' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        res.status(500).json({ error: 'Error al eliminar la asociación' });
     }
 };
+
 
 // Unirse a una asociación
 exports.joinAssociation = async (req, res) => {

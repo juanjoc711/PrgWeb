@@ -1,7 +1,9 @@
 import { register, login } from "./auth/auth.js";
 import { changeUsername, changePassword } from "./components/account/account.js"; 
 import { fetchAssociations, fetchMyAssociations, createAssociation, searchAssociations } from "./components/associations/associations.js";
-import { switchView, setToken } from "./utils/utils.js"; 
+import { renderMyAssociationsTable} from "./components/associations/renderMyAssociationsTable.js";
+import { switchView, setToken, getUserId, getUserRole } from "./utils/utils.js"; 
+
 
 
 
@@ -83,9 +85,12 @@ document.getElementById("logout-button").addEventListener("click", () => {
   switchView("login");
 });
 
-document.getElementById("my-associations-button").addEventListener("click", () => {
-  fetchMyAssociations(); // Llama a la función para obtener las asociaciones
-  switchView("my-associations-view"); // Cambia a la vista de "Mis Asociaciones"
+document.getElementById("my-associations-button").addEventListener("click", async () => {
+  const userId = getUserId(); // Obtiene el ID del usuario
+  const userRole = getUserRole(); // Obtiene el rol del usuario
+  const associations = await fetchMyAssociations(false); // Obtiene las asociaciones
+  renderMyAssociationsTable(associations, userId, userRole); // Renderiza la tabla
+  switchView("my-associations-view");
 });
 
 
