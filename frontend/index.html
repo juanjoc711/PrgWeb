@@ -9,33 +9,92 @@
 <body>
   <h1>Sistema de Asociaciones</h1>
 
+  <!-- Registro -->
+  <section id="register" style="display: none;">
+    <h2>Registrarse</h2>
+    <form id="register-form">
+      <input type="text" id="register-username" placeholder="Usuario" required />
+      <input type="password" id="register-password" placeholder="Contraseña" required />
+      <button type="submit">Registrarse</button>
+    </form>
+    <button id="go-to-login">Ya tengo una cuenta</button>
+  </section>
+
   <!-- Login -->
   <section id="login">
     <h2>Iniciar Sesión</h2>
     <form id="login-form">
-        <input type="text" id="username" placeholder="Usuario" required />
-        <input type="password" id="password" placeholder="Contraseña" required />
-        <button type="submit">Login</button>
-      </form>      
+      <input type="text" id="username" placeholder="Usuario" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <button type="submit">Login</button>
+    </form>
+    <button id="go-to-register">¿No tienes cuenta? Regístrate</button>
     <p id="login-error" style="color: red; display: none;">Error de autenticación</p>
   </section>
 
-  <!-- Crear Asociación -->
-  <section id="create-association" style="display: none;">
-    <h2>Crear Asociación</h2>
-    <form id="create-form">
-      <input type="text" id="association-name" placeholder="Nombre" required />
-      <input type="text" id="association-description" placeholder="Descripción" required />
-      <button type="submit">Crear</button>
+  <!-- Vista de Asociaciones -->
+  <section id="associations-view" style="display: none;">
+    <div id="create-button-container" style="display: none;">
+      <button id="create-button">Crear Asociación</button>
+    </div>
+    <header>
+      <div id="user-menu">
+        <span id="user-icon">👤</span>
+        <div id="user-dropdown" style="display: none;">
+          <button id="admin-button">Administración</button>
+          <button id="my-associations-button">Mis Asociaciones</button>
+          <button id="logout-button">Cerrar Sesión</button>
+        </div>
+      </div>
+    </header>
+
+    <table id="associations-table">
+      <thead>
+        <tr>
+          <th>Logo</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="associations-body"></tbody>
+    </table>
+  </section>
+  <!-- Administración de Cuenta -->
+  <section id="account-management" style="display: none;">
+    <h2>Administración de Cuenta</h2>
+    <form id="change-username-form">
+      <h3>Cambiar Nombre de Usuario</h3>
+      <input type="text" id="new-username" placeholder="Nuevo Usuario" required />
+      <button type="submit">Cambiar Usuario</button>
     </form>
+    <form id="change-password-form">
+      <h3>Cambiar Contraseña</h3>
+      <input type="password" id="current-password" placeholder="Contraseña Actual" required />
+      <input type="password" id="new-password" placeholder="Nueva Contraseña" required />
+      <button type="submit">Cambiar Contraseña</button>
+    </form>
+    <button id="back-to-main">Volver</button>
   </section>
-
-  <!-- Listar Asociaciones -->
-  <section id="list-associations" style="display: none;">
-    <h2>Lista de Asociaciones</h2>
-    <ul id="associations-list"></ul>
+  <!-- Vistaasociaciones miembro -->
+  <section id="my-associations-view" style="display: none;">
+    <h2>Mis Asociaciones</h2>
+    <table id="my-associations-table">
+      <thead>
+        <tr>
+          <th>Logo</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody id="my-associations-body"></tbody>
+    </table>
+    <button id="back-to-main-my-associations">Volver</button>
   </section>
+  
+  
 
-  <script src="app.js"></script>
+
+  <script type="module" src="./app.js"></script>
 </body>
 </html>

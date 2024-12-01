@@ -38,3 +38,59 @@ body {
     display: none;
   }
   
+  /* Estilo para la tabla */
+table {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* Estilo para el menú del usuario */
+#user-menu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#user-dropdown {
+  position: absolute;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  display: none;
+  padding: 10px;
+}
+
+#user-dropdown button {
+  display: block;
+  margin: 5px 0;
+}
+#create-button-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+#create-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#create-button:hover {
+  background-color: #45a049;
+}

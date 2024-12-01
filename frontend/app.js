@@ -1,92 +1,89 @@
-const baseUrl = "http://localhost:3000"; 
+import { register, login } from "./auth.js";
+import { changeUsername, changePassword } from "./account.js"; 
+import { fetchAssociations, fetchMyAssociations, createAssociation } from "./associations.js";
+import { switchView, setToken } from "./utils.js"; 
 
-// Variables globales
-let token = "";
 
-// Login
-document.getElementById("login-form").addEventListener("submit", async (e) => {
+
+document.getElementById("go-to-register").addEventListener("click", () => {
+  switchView("register");
+});
+
+document.getElementById("go-to-login").addEventListener("click", () => {
+  switchView("login");
+});
+
+document.getElementById("register-form").addEventListener("submit", (e) => {
   e.preventDefault();
+  const username = document.getElementById("register-username").value;
+  const password = document.getElementById("register-password").value;
+  register(username, password);
+});
 
+document.getElementById("login-form").addEventListener("submit", (e) => {
+  e.preventDefault();
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  try {
-    const res = await fetch(`${baseUrl}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+  login(username, password, () => {
+    switchView("associations-view");
+    document.getElementById("create-button-container").style.display = "block";
+    fetchAssociations();
+  });
+});
 
-    if (res.ok) {
-      const data = await res.json();
-      token = data.token;
-
-      alert("Login exitoso");
-
-      document.getElementById("login").style.display = "none";
-      document.getElementById("create-association").style.display = "block";
-      document.getElementById("list-associations").style.display = "block";
-
-      fetchAssociations();
-    } else {
-      document.getElementById("login-error").style.display = "block";
-      document.getElementById("login-error").innerText = "Usuario o contraseña incorrectos";
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Hubo un problema al conectarse con el servidor.");
+// Crear asociación
+document.getElementById("create-button").addEventListener("click", () => {
+  const name = prompt("Introduce el nombre de la asociación:");
+  const description = prompt("Introduce una descripción para la asociación:");
+  if (name && description) {
+    createAssociation(name, description);
+  } else {
+    alert("Por favor, completa todos los campos.");
   }
 });
 
-// Crear Asociación
-document.getElementById("create-form").addEventListener("submit", async (e) => {
+// Botón de administración personal
+document.getElementById("admin-button").addEventListener("click", () => {
+  switchView("account-management");
+});
+// Mostrar/ocultar el menú desplegable
+document.getElementById("user-icon").addEventListener("click", () => {
+  const dropdown = document.getElementById("user-dropdown");
+  dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+});
+// Botón de "Administración de cuenta"
+document.getElementById("admin-button").addEventListener("click", () => {
+  switchView("account-management");
+});
+
+// Cambiar Nombre de Usuario
+document.getElementById("change-username-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const name = document.getElementById("association-name").value;
-  const description = document.getElementById("association-description").value;
-
-  try {
-    const res = await fetch(`${baseUrl}/associations`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ name, description }),
-    });
-
-    if (res.ok) {
-      alert("Asociación creada exitosamente");
-      fetchAssociations();
-    } else {
-      alert("Error al crear la asociación");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
+  const newUsername = document.getElementById("new-username").value;
+  await changeUsername(newUsername);
 });
 
-// Listar Asociaciones
-async function fetchAssociations() {
-  try {
-    const res = await fetch(`${baseUrl}/associations`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+// Cambiar Contraseña
+document.getElementById("change-password-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const currentPassword = document.getElementById("current-password").value;
+  const newPassword = document.getElementById("new-password").value;
+  await changePassword(currentPassword, newPassword);
+});
 
-    if (res.ok) {
-      const associations = await res.json();
-      const list = document.getElementById("associations-list");
-      list.innerHTML = "";
+// Botón "Volver" en la administración de cuenta
+document.getElementById("back-to-main").addEventListener("click", () => {
+  switchView("associations-view");
+});
 
-      associations.forEach((assoc) => {
-        const item = document.createElement("li");
-        item.textContent = `${assoc.name}: ${assoc.description}`;
-        list.appendChild(item);
-      });
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+// Cerrar sesión
+document.getElementById("logout-button").addEventListener("click", () => {
+  setToken(""); // Aquí se asegura de que el token se limpie globalmente
+  switchView("login");
+});
+
+document.getElementById("my-associations-button").addEventListener("click", () => {
+  fetchMyAssociations(); // Asegúrate de que esta función esté bien definida
+  switchView("my-associations-view"); // Cambia a una vista específica para "Mis Asociaciones"
+});
