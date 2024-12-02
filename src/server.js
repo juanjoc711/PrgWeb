@@ -1,7 +1,8 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const connectDatabase = require('./config/database');
+import express from 'express';
+import cors from 'cors';
+import connectDatabase from './config/database.js';
+import authRoutes from './routes/auth.js';
+import associationsRoutes from './routes/associations.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,9 +15,6 @@ app.use(cors()); // Permitir cualquier origen para pruebas
 app.use(express.json()); // Middleware para analizar JSON
 
 // Rutas
-const authRoutes = require('./routes/auth');
-const associationsRoutes = require('./routes/associations');
-
 app.use('/auth', authRoutes);
 app.use('/associations', associationsRoutes);
 

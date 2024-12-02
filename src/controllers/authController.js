@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
-const { errors, success } = require('../constants/messages');
-const { jwtSecret } = require('../config/config');
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import User from '../models/User.js';
+import messages from '../constants/messages.js';
+import constants from '../config/constants.js';
 
 // Registrar usuario
 const register = async (req, res) => {
@@ -10,13 +10,13 @@ const register = async (req, res) => {
     const { username, password, role } = req.body;
 
     const existingUser = await User.findOne({ username });
-    if (existingUser) return res.status(400).send(errors.USERNAME_TAKEN);
+    if (existingUser) return res.status(400).send(messages.errors.USERNAME_TAKEN);
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ username, password: hashedPassword, role: role || 'user' });
     await user.save();
 
-    res.status(201).send(success.USER_CREATED);
+    res.status(201).send(messages.success.USER_CREATED);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -28,14 +28,15 @@ const login = async (req, res) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
-    if (!user) return res.status(404).send(errors.USER_NOT_FOUND);
+    if (!user) return res.status(404).send(messages.errors.USER_NOT_FOUND);
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).send(errors.INVALID_PASSWORD);
+    if (!isMatch) return res.status(401).send(messages.errors.INVALID_PASSWORD);
 
-    const token = jwt.sign({ id: user._id, role: user.role }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, role: user.role }, constants.jwtSecret, { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error.message);
   }
 };
@@ -46,23 +47,23 @@ const changeUsername = async (req, res) => {
     const { newUsername } = req.body;
 
     if (!newUsername) {
-      return res.status(400).send(errors.USERNAME_REQUIRED);
+      return res.status(400).send(messages.errors.USERNAME_REQUIRED);
     }
 
     const existingUser = await User.findOne({ username: newUsername });
     if (existingUser) {
-      return res.status(400).send(errors.USERNAME_TAKEN);
+      return res.status(400).send(messages.errors.USERNAME_TAKEN);
     }
 
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).send(errors.USER_NOT_FOUND);
+      return res.status(404).send(messages.errors.USER_NOT_FOUND);
     }
 
     user.username = newUsername;
     await user.save();
 
-    res.status(200).send(success.USERNAME_UPDATED);
+    res.status(200).send(messages.success.USERNAME_UPDATED);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -74,29 +75,29 @@ const changePassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
-      return res.status(400).send(errors.PASSWORD_REQUIRED);
+      return res.status(400).send(messages.errors.PASSWORD_REQUIRED);
     }
 
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).send(errors.USER_NOT_FOUND);
+      return res.status(404).send(messages.errors.USER_NOT_FOUND);
     }
 
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.status(400).send(errors.INVALID_PASSWORD);
+      return res.status(400).send(messages.errors.INVALID_PASSWORD);
     }
 
     user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
 
-    res.status(200).send(success.PASSWORD_UPDATED);
+    res.status(200).send(messages.success.PASSWORD_UPDATED);
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
 
-module.exports = {
+export {
   register,
   login,
   changeUsername,

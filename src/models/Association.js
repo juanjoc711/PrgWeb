@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const associationSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
@@ -7,4 +7,4 @@ const associationSchema = new mongoose.Schema({
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Usuarios miembros
 }, { timestamps: true });
 
-module.exports = mongoose.model('Association', associationSchema);
+export default mongoose.model('Association', associationSchema);

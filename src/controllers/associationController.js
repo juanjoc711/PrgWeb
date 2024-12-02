@@ -1,7 +1,7 @@
-const Association = require('../models/Association');
+import Association from '../models/Association.js';
 
 // Crear una nueva asociación
-exports.createAssociation = async (req, res) => {
+const createAssociation = async (req, res) => {
     const { name, description } = req.body;
     if (!name || !description) {
         return res.status(400).json({ error: 'El nombre y la descripción son obligatorios' });
@@ -21,7 +21,7 @@ exports.createAssociation = async (req, res) => {
 };
 
 // Listar todas las asociaciones
-exports.listAssociations = async (req, res) => {
+const listAssociations = async (req, res) => {
     try {
         const associations = await Association.find().populate('createdBy', 'username');
         res.status(200).json(associations);
@@ -31,7 +31,7 @@ exports.listAssociations = async (req, res) => {
 };
 
 // Actualizar una asociación
-exports.updateAssociation = async (req, res) => {
+const updateAssociation = async (req, res) => {
     try {
         const association = await Association.findById(req.params.id);
         if (!association) {
@@ -50,8 +50,7 @@ exports.updateAssociation = async (req, res) => {
 };
 
 // Eliminar una asociación
-
-exports.deleteAssociation = async (req, res) => {
+const deleteAssociation = async (req, res) => {
     try {
         const association = await Association.findById(req.params.id);
 
@@ -74,9 +73,8 @@ exports.deleteAssociation = async (req, res) => {
     }
 };
 
-
 // Unirse a una asociación
-exports.joinAssociation = async (req, res) => {
+const joinAssociation = async (req, res) => {
     try {
         const association = await Association.findById(req.params.id);
 
@@ -98,7 +96,7 @@ exports.joinAssociation = async (req, res) => {
 };
 
 // Dejar una asociación
-exports.leaveAssociation = async (req, res) => {
+const leaveAssociation = async (req, res) => {
     try {
         const association = await Association.findById(req.params.id);
 
@@ -121,7 +119,7 @@ exports.leaveAssociation = async (req, res) => {
 };
 
 // Obtener asociaciones del usuario logueado
-exports.myAssociations = async (req, res) => {
+const myAssociations = async (req, res) => {
     try {
         const associations = await Association.find({ members: req.user.id });
         res.status(200).json(associations);
@@ -131,7 +129,7 @@ exports.myAssociations = async (req, res) => {
 };
 
 // Buscar asociaciones por nombre
-exports.searchAssociations = async (req, res) => {
+const searchAssociations = async (req, res) => {
     const { query } = req.query; // Captura el parámetro de búsqueda
     try {
         const associations = await Association.find({
@@ -141,4 +139,15 @@ exports.searchAssociations = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+};
+
+export {
+    createAssociation,
+    listAssociations,
+    updateAssociation,
+    deleteAssociation,
+    joinAssociation,
+    leaveAssociation,
+    myAssociations,
+    searchAssociations
 };
