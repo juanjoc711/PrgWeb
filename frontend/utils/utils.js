@@ -10,7 +10,7 @@ export function getToken() {
 }
 
 export function switchView(viewId) {
-    const views = ["login", "register", "associations-view", "account-management", "my-associations-view"];
+    const views = ["login", "register", "associations-view", "account-management", "my-associations-view", "association-details-view"];
     views.forEach((id) => {
         document.getElementById(id).style.display = id === viewId ? "block" : "none";
     });

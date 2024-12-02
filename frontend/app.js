@@ -106,3 +106,8 @@ document.getElementById("search-bar").addEventListener("input", (e) => {
       fetchAssociations(); // Mostrar todas las asociaciones si el campo está vacío
   }
 });
+
+document.getElementById("back-to-associations-details").addEventListener("click", () => {
+  switchView("associations-view"); // Cambia a la vista principal de asociaciones
+});
+

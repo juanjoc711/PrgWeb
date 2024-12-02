@@ -3,6 +3,7 @@ import cors from 'cors';
 import connectDatabase from './config/database.js';
 import authRoutes from './routes/auth.js';
 import associationsRoutes from './routes/associations.js';
+import messagesRoutes from './routes/messagesRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(express.json()); // Middleware para analizar JSON
 // Rutas
 app.use('/auth', authRoutes);
 app.use('/associations', associationsRoutes);
+app.use('/associations', messagesRoutes);
 
 // Iniciar el servidor
 app.listen(PORT, () => {
