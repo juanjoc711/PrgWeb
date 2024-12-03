@@ -2,23 +2,36 @@ import Association from '../models/Association.js';
 
 // Crear una nueva asociación
 const createAssociation = async (req, res) => {
-    const { name, description } = req.body;
-    if (!name || !description) {
-        return res.status(400).json({ error: 'El nombre y la descripción son obligatorios' });
-    }
-
     try {
+        //console.log("Cuerpo recibido:", req.body);
+        //console.log("Archivo recibido:", req.file);
+        const { name, description } = req.body;
+
+        // Validar campos obligatorios
+        if (!name || !description) {
+            return res.status(400).json({ error: "El nombre y la descripción son obligatorios" });
+        }
+
+        // Procesar la imagen si existe
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+
         const association = new Association({
             name,
             description,
+            image,
             createdBy: req.user.id,
         });
+
         await association.save();
         res.status(201).json(association);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error("Error en createAssociation:", error);
+        res.status(500).json({ error: error.message });
     }
 };
+
+
+
 
 // Listar todas las asociaciones
 const listAssociations = async (req, res) => {

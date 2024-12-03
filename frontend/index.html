@@ -70,6 +70,19 @@
         <tbody id="associations-body"></tbody>
     </table>
 </section>
+
+
+<!-- Modal para crear asociación -->
+<div id="create-association-modal" style="display: none;">
+  <form id="create-association-form" enctype="multipart/form-data">
+    <input type="text" name="name" id="association-name" placeholder="Nombre de la asociación" required>
+    <textarea name="description" id="association-description" placeholder="Descripción de la asociación" required></textarea>
+    <input type="file" name="image" id="association-image" accept="image/*">
+    <button type="submit">Crear</button>
+    <button type="button" id="close-modal-button" onclick="closeModal()">Cerrar</button>
+  </form>
+</div>
+
   <!-- Administración de Cuenta -->
   <section id="account-management" style="display: none;">
     <h2>Administración de Cuenta</h2>

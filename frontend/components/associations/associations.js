@@ -105,25 +105,28 @@ export async function fetchMyAssociations(render = true) {
 
 
 
-export async function createAssociation(name, description) {
-  try {
-    const res = await fetch(`http://localhost:3000/associations`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, description }),
-    });
+export async function createAssociation(name, description, imageFile) {
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('description', description);
+  if (imageFile) formData.append('image', imageFile);
 
-    if (res.ok) {
-      alert("Asociación creada exitosamente");
-      fetchAssociations();
-    } else {
-      alert("Error al crear la asociación");
-    }
+  try {
+      const res = await fetch('http://localhost:3000/associations', {
+          method: 'POST',
+          headers: {
+              Authorization: `Bearer ${getToken()}`,
+          },
+          body: formData,
+      });
+
+      if (res.ok) {
+          alert('Asociación creada exitosamente');
+      } else {
+          alert('Error al crear la asociación');
+      }
   } catch (error) {
-    console.error("Error al crear la asociación:", error);
+      console.error('Error al crear la asociación:', error);
   }
 }
 

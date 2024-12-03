@@ -9,10 +9,21 @@ export function renderAssociationsTable(associations, myAssociations) {
     associations.forEach((assoc) => {
         const row = document.createElement("tr");
 
+        // Logo o imagen de la asociación
         const logoCell = document.createElement("td");
-        logoCell.textContent = "📷";
+        if (assoc.image) {
+            const img = document.createElement("img");
+            img.src = assoc.image;
+            img.alt = "Logo de la asociación";
+            img.style.width = "50px";
+            img.style.height = "50px";
+            logoCell.appendChild(img);
+        } else {
+            logoCell.textContent = "📷"; // Emoji de cámara por defecto
+        }
         row.appendChild(logoCell);
 
+        // Nombre de la asociación con funcionalidad clickeable
         const nameCell = document.createElement("td");
         nameCell.textContent = assoc.name;
         nameCell.style.cursor = "pointer"; // Cambia el cursor para indicar que es clickeable
@@ -25,10 +36,12 @@ export function renderAssociationsTable(associations, myAssociations) {
         };
         row.appendChild(nameCell);
 
+        // Descripción de la asociación
         const descCell = document.createElement("td");
         descCell.textContent = assoc.description;
         row.appendChild(descCell);
 
+        // Botones de acción (Unirse o Abandonar)
         const actionCell = document.createElement("td");
 
         if (myAssociations && myAssociations.includes(assoc._id)) {

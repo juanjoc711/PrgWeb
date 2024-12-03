@@ -2,7 +2,7 @@ import { register, login } from "./auth/auth.js";
 import { changeUsername, changePassword } from "./components/account/account.js"; 
 import { fetchAssociations, fetchMyAssociations, createAssociation, searchAssociations } from "./components/associations/associations.js";
 import { renderMyAssociationsTable} from "./components/associations/renderMyAssociationsTable.js";
-import { switchView, setToken, getUserId, getUserRole } from "./utils/utils.js"; 
+import { switchView, setToken, getUserId, getUserRole, getToken} from "./utils/utils.js"; 
 
 
 
@@ -34,16 +34,47 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
   });
 });
 
-// Crear asociación
+// Botón para abrir el modal de crear asociación
 document.getElementById("create-button").addEventListener("click", () => {
-  const name = prompt("Introduce el nombre de la asociación:");
-  const description = prompt("Introduce una descripción para la asociación:");
-  if (name && description) {
-    createAssociation(name, description);
-  } else {
-    alert("Por favor, completa todos los campos.");
+  document.getElementById("create-association-modal").style.display = "flex"; // Corrige el ID aquí
+});
+
+// Botón para cerrar el modal de crear asociación
+function closeModal() {
+  document.getElementById("create-association-modal").style.display = "none"; // Corrige el ID aquí
+}
+
+// Enviar el formulario
+document.getElementById('create-association-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const form = document.getElementById('create-association-form');
+  const formData = new FormData(form); // Obtén los datos del formulario directamente
+
+  try {
+      const res = await fetch('http://localhost:3000/associations', {
+          method: 'POST',
+          headers: {
+              Authorization: `Bearer ${getToken()}`, // Incluye el token
+          },
+          body: formData, // Envío de FormData
+      });
+
+      if (res.ok) {
+          alert('Asociación creada exitosamente');
+          fetchAssociations(); // Actualiza la lista principal
+          document.getElementById("create-association-modal").style.display = "none"; // Cierra el modal
+      } else {
+          alert('Error al crear la asociación');
+      }
+  } catch (error) {
+      console.error('Error al crear la asociación:', error);
   }
 });
+
+
+
+
 
 // Botón de administración personal
 document.getElementById("admin-button").addEventListener("click", () => {
