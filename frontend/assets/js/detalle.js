@@ -5,11 +5,12 @@ import { ERROR_MESSAGES } from "../../constants/messages.js";
 const urlParams = new URLSearchParams(window.location.search);
 const associationId = urlParams.get("id");
 
-// Validar ID
-if (!associationId || associationId === "undefined") {
+if (!associationId) {
     alert("ID de la asociación no encontrado en la URL.");
-    window.location.href = "./index.html"; // Redirige a la página principal si no hay ID
+    window.location.href = "index.html";
 }
+
+
 
 // Cargar detalles de la asociación
 document.addEventListener("DOMContentLoaded", async () => {

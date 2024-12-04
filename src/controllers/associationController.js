@@ -37,7 +37,17 @@ const createAssociation = async (req, res) => {
 const listAssociations = async (req, res) => {
     try {
         const associations = await Association.find().populate('createdBy', 'username');
-        res.status(200).json(associations);
+
+        // Asegurarse de que el ID esté presente
+        const associationsWithId = associations.map((assoc) => ({
+            id: assoc._id, // Convertir _id a id
+            name: assoc.name,
+            description: assoc.description,
+            image: assoc.image,
+            createdBy: assoc.createdBy,
+        }));
+
+        res.status(200).json(associationsWithId);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -154,7 +164,21 @@ const searchAssociations = async (req, res) => {
     }
 };
 
-export {
+// Obtener una asociación por ID
+const getAssociationById = async (req, res) => {
+    try {
+        const association = await Association.findById(req.params.id).populate('createdBy', 'username');
+        if (!association) {
+            return res.status(404).json({ error: 'Asociación no encontrada' });
+        }
+        res.status(200).json(association);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener la asociación' });
+    }
+};
+
+export { 
     createAssociation,
     listAssociations,
     updateAssociation,
@@ -162,5 +186,6 @@ export {
     joinAssociation,
     leaveAssociation,
     myAssociations,
-    searchAssociations
+    searchAssociations,
+    getAssociationById, // Agregamos el nuevo controlador
 };

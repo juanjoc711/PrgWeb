@@ -8,6 +8,7 @@ import {
     leaveAssociation, 
     myAssociations,
     searchAssociations,
+    getAssociationById,
 } from '../controllers/associationController.js';
 import authenticateToken from '../middleware/auth.js';
 import checkRole from '../middleware/checkRole.js';
@@ -28,5 +29,6 @@ router.post('/:id/join', joinAssociation);
 router.post('/:id/leave', leaveAssociation);
 router.get('/my', myAssociations);
 router.get('/search', searchAssociations);
+router.get('/:id', getAssociationById);
 
 export default router;

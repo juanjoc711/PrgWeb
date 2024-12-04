@@ -18,7 +18,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const associations = await response.json();
         const tableBody = document.getElementById("associationsTableBody");
         tableBody.innerHTML = "";
+
         associations.forEach((assoc) => {
+            console.log("Asociación recibida:", assoc); // Debug para revisar la estructura
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${assoc.name}</td>
@@ -30,7 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             tableBody.appendChild(row);
         });
-        
         // Agregar eventos a los botones
         tableBody.addEventListener("click", handleTableActions);
     } catch (error) {
@@ -63,8 +64,14 @@ async function handleTableActions(event) {
                 alert(ERROR_MESSAGES.FETCH_ERROR);
             }
         } else if (action === "view") {
+            const associationId = button.getAttribute("data-id");
+            if (!associationId) {
+                alert("ID de la asociación no encontrado.");
+                return;
+            }
             window.location.href = `./detalle.html?id=${associationId}`;
         }
+        
     } catch (error) {
         console.error(error);
         alert(ERROR_MESSAGES.FETCH_ERROR);
