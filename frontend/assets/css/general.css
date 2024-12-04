@@ -1,0 +1,25 @@
+/* Estilo general del header */
+header.navbar {
+    background-color: #f8f9fa !important; /* Gris claro forzado */
+    color: black !important; /* Texto negro forzado */
+    padding: 10px 20px;
+}
+/* Centrar el texto de la navbar */
+header .navbar-brand {
+    margin: 0 auto; /* Asegura el centrado horizontal */
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+/* Ajuste del dropdown */
+header .dropdown {
+    position: absolute;
+    right: 20px; /* Asegura que esté en el borde derecho */
+    top: 50%;
+    transform: translateY(-50%); /* Centrado vertical */
+}
+
+/* Ícono del botón de opciones */
+header .dropdown button i {
+    font-size: 1.2rem;
+}

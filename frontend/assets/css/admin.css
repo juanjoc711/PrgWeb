@@ -1,0 +1,23 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.btn {
+    margin-right: 5px;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.modal-content {
+    border-radius: 8px;
+}

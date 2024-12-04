@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Asociación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/detalle.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 id="associationName" class="text-center mb-4">Cargando...</h2>
+        <div class="text-center mb-4">
+            <img id="associationImage" src="./assets/img/default.png" alt="Imagen de la Asociación" class="img-fluid" style="max-height: 200px;">
+        </div>
+        <p id="associationDescription" class="text-center">Cargando descripción...</p>
+
+        <!-- Chat -->
+        <div class="chat-box mt-4">
+            <h4>Foro de la Asociación</h4>
+            <div id="chatBox" class="chat-messages border rounded p-3" style="height: 300px; overflow-y: auto;">
+                <!-- Mensajes dinámicos -->
+            </div>
+            <form id="chatForm" class="mt-3">
+                <div class="input-group">
+                    <input type="text" id="chatMessage" class="form-control" placeholder="Escribe un mensaje...">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./assets/js/detalle.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
