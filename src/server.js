@@ -34,3 +34,7 @@ app.use('/messages', messagesRoutes);
 app.listen(PORT, () => {
   console.log(`Servidor funcionando en el puerto ${PORT}`);
 });
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});

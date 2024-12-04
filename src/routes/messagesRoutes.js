@@ -4,25 +4,27 @@ import {
     createMessage,
     getMessageById,
     updateMessage,
-    deleteMessage
+    deleteMessage,
 } from '../controllers/messagesController.js';
 import authenticateToken from '../middleware/auth.js';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // Obtener todos los mensajes de una asociación
-router.get('/:id/messages', authenticateToken, getMessagesByAssociation);
+router.get('/', authenticateToken, getMessagesByAssociation);
 
 // Crear un mensaje para una asociación
-router.post('/:id/messages', authenticateToken, createMessage);
+router.post('/', authenticateToken, createMessage);
 
 // Obtener un mensaje específico
-router.get('/:id/messages/:messageId', authenticateToken, getMessageById);
+router.get('/:messageId', authenticateToken, getMessageById);
 
 // Actualizar un mensaje
-router.put('/:id/messages/:messageId', authenticateToken, updateMessage);
+router.put('/:messageId', authenticateToken, updateMessage);
 
 // Eliminar un mensaje
-router.delete('/:id/messages/:messageId', authenticateToken, deleteMessage);
+router.delete('/:messageId', authenticateToken, deleteMessage);
+
+
 
 export default router;

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Cargar mensajes del chat
 async function loadChatMessages() {
     try {
-        const response = await fetch(`${ASSOCIATION_URLS.LIST}/${associationId}/chat`, {
+        const response = await fetch(ASSOCIATION_URLS.MESSAGES(associationId), {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -61,7 +61,7 @@ async function loadChatMessages() {
             const messageElement = document.createElement("div");
             messageElement.className = "chat-message mb-2";
             messageElement.innerHTML = `
-                <strong>${msg.username}</strong>: ${msg.message}
+                <strong>${msg.author.username}</strong>: ${msg.content}
             `;
             chatBox.appendChild(messageElement);
         });
@@ -71,7 +71,6 @@ async function loadChatMessages() {
     }
 }
 
-// Manejar envío de mensajes
 document.getElementById("chatForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -80,14 +79,12 @@ document.getElementById("chatForm").addEventListener("submit", async (e) => {
     if (!message.trim()) return;
 
     try {
-        const response = await fetch(`${ASSOCIATION_URLS.LIST}/${associationId}/chat`, {
-            method: "POST",
+        const response = await fetch(`${ASSOCIATION_URLS.LIST}/${associationId}/messages`, {
             headers: {
-                "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-            body: JSON.stringify({ message }),
         });
+        
 
         if (response.ok) {
             document.getElementById("chatMessage").value = "";
@@ -100,3 +97,4 @@ document.getElementById("chatForm").addEventListener("submit", async (e) => {
         alert(ERROR_MESSAGES.FETCH_ERROR);
     }
 });
+

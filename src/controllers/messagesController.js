@@ -3,14 +3,20 @@ import Message from '../models/Message.js';
 // Obtener todos los mensajes de una asociación
 export const getMessagesByAssociation = async (req, res) => {
     try {
-        const messages = await Message.find({ association: req.params.id })
+        const associationId = req.params.id.trim(); // Limpia el ID
+        console.log('ID de la asociación:', associationId);
+
+        const messages = await Message.find({ association: associationId })
             .populate('author', 'username')
             .sort({ createdAt: -1 });
+
         res.status(200).json(messages);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Crear un mensaje para una asociación
 export const createMessage = async (req, res) => {

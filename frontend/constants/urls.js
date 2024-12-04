@@ -13,4 +13,5 @@ export const ASSOCIATION_URLS = {
     UPDATE: (id) => `${BASE_URL}/associations/${id}`,
     DELETE: (id) => `${BASE_URL}/associations/${id}`,
     USER_ASSOCIATIONS: `${BASE_URL}/user/associations`,
+    MESSAGES: (id) => `${BASE_URL}/associations/${id}/messages`,
 };
