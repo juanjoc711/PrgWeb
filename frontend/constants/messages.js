@@ -12,4 +12,7 @@ export const SUCCESS_MESSAGES = {
     LOGIN_SUCCESS: "Inicio de sesión exitoso.",
     ASSOCIATION_JOINED: "Te has unido a la asociación con éxito.",
     ASSOCIATION_LEFT: "Has salido de la asociación con éxito.",
+    ASSOCIATION_CREATED: "Asociación creada con éxito.",
+    ASSOCIATION_UPDATED: "Asociación actualizada con éxito.",
+    PROFIILE_UPDATED: "Perfil actualizado con éxito.",
 };

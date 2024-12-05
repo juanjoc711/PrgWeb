@@ -26,7 +26,7 @@ router.use(authenticateToken);
 router.post('/', upload.single('image'), createAssociation);
 router.get('/', listAssociations);
 router.get('/:id', getAssociationById);
-router.put('/:id', updateAssociation);
+router.put('/:id', upload.single('image'), updateAssociation);
 router.delete('/:id', checkRole('admin'), deleteAssociation);
 
 // Subruta para mensajes
@@ -35,7 +35,7 @@ router.use('/:id/messages', messagesRoutes); // Registra aquí la subruta
 // Otras rutas
 router.post('/:id/join', joinAssociation);
 router.post('/:id/leave', leaveAssociation);
-router.get('/my', myAssociations);
+router.get('/user/my', myAssociations);
 router.get('/search', searchAssociations);
 
 export default router;

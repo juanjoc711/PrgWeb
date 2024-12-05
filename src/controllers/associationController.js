@@ -44,6 +44,7 @@ const listAssociations = async (req, res) => {
             name: assoc.name,
             description: assoc.description,
             image: assoc.image,
+            members: assoc.members,
             createdBy: assoc.createdBy,
         }));
 
@@ -56,17 +57,23 @@ const listAssociations = async (req, res) => {
 // Actualizar una asociación
 const updateAssociation = async (req, res) => {
     try {
+        console.log(req.user);
         const association = await Association.findById(req.params.id);
         if (!association) {
             return res.status(404).send('Asociación no encontrada');
         }
+        console.log(req.body);
 
-        if (req.user.role !== 'admin' && association.createdBy.toString() !== req.user.id) {
-            return res.status(403).send('No tienes permisos para actualizar esta asociación');
+        if(req.user.role === "admin" || association.createdBy.toString() === req.user.id){
+            const { name, description } = req.body;
+            const image = req.file ? `/uploads/${req.file.filename}` : association.image;
+
+            const updated = await Association.findByIdAndUpdate(req.params.id, { name, description, image }, { new: true });
+            console.log(updated);
+            res.status(200).json(updated);
+        } else {
+            return res.status(403).send('No tienes permisos para editar esta asociación');
         }
-
-        const updated = await Association.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json(updated);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -167,7 +174,7 @@ const searchAssociations = async (req, res) => {
 // Obtener una asociación por ID
 const getAssociationById = async (req, res) => {
     try {
-        const association = await Association.findById(req.params.id).populate('createdBy', 'username');
+        const association = await Association.findById(req.params.id);
         if (!association) {
             return res.status(404).json({ error: 'Asociación no encontrada' });
         }

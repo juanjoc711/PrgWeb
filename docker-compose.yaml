@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./src         # Path to the backend folder
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"          # Expose backend on port 3000
+    depends_on:
+      - mongodb              # Ensure MongoDB starts before backend
+    networks:
+      - app-network
+    volumes:
+      - ./src:/app           # Bind mount for live file syncing
+      - /app/node_modules    # Exclude node_modules to avoid conflicts
+      - uploads:/app/uploads # Named volume for uploads folder
+    command: npm run dev     # Use nodemon to enable watch mode
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/mydatabase  # MongoDB connection string
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - uploads:/usr/share/nginx/html/uploads # Named volume for uploads folder
+
+  mongodb:
+    image: mongo:5
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  uploads:

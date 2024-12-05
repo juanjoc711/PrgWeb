@@ -1,5 +1,6 @@
 import { ASSOCIATION_URLS } from "../../constants/urls.js";
 import { ERROR_MESSAGES } from "../../constants/messages.js";
+import { getDecodedToken } from "./utils.js";
 
 // Obtener parámetros de URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -15,6 +16,11 @@ if (!associationId) {
 // Cargar detalles de la asociación
 document.addEventListener("DOMContentLoaded", async () => {
     try {
+        const tokenPayload = getDecodedToken();
+        if (!tokenPayload) {
+            alert("Token inválido o expirado. Por favor, inicie sesión nuevamente.");
+            location.href = "./index.html";
+        }
         const response = await fetch(`${ASSOCIATION_URLS.LIST}/${associationId}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -84,7 +90,7 @@ document.getElementById("chatForm").addEventListener("submit", async (e) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
-        
+
 
         if (response.ok) {
             document.getElementById("chatMessage").value = "";
