@@ -1,1 +1,1 @@
-# PrgWeb
+# Sistema de asociaciones Universitarias.
