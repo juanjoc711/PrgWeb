@@ -374,3 +374,6 @@ document.getElementById("editProfileModal").addEventListener("hidden.bs.modal", 
 }
 );
 
+document.getElementById("myAssociationsLink").addEventListener("click", () => {
+    window.location.href = "./misAsociaciones.html";
+});

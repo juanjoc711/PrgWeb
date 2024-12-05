@@ -1,12 +1,12 @@
 /* Estilo general del header */
 header.navbar {
-    background-color: #f8f9fa !important; /* Gris claro forzado */
-    color: black !important; /* Texto negro forzado */
+    background-color: #f8f9fa !important; 
+    color: black !important; 
     padding: 10px 20px;
 }
 /* Centrar el texto de la navbar */
 header .navbar-brand {
-    margin: 0 auto; /* Asegura el centrado horizontal */
+    margin: 0 auto; 
     text-align: center;
     font-size: 1.5rem;
 }
@@ -14,12 +14,21 @@ header .navbar-brand {
 /* Ajuste del dropdown */
 header .dropdown {
     position: absolute;
-    right: 20px; /* Asegura que esté en el borde derecho */
+    right: 20px; 
     top: 50%;
-    transform: translateY(-50%); /* Centrado vertical */
+    transform: translateY(-50%);
 }
 
 /* Ícono del botón de opciones */
 header .dropdown button i {
     font-size: 1.2rem;
+}
+
+
+/* Ajuste de tamaño para las imágenes de íconos de asociaciones */
+.table img.img-thumbnail {
+    max-width: 80px; 
+    max-height: 80px; 
+    object-fit: cover; 
+    border-radius: 8px; 
 }
