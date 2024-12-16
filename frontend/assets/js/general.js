@@ -254,28 +254,21 @@ document.getElementById("editAssociationForm").addEventListener("submit", async 
             body: formData,
         });
 
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            if (responseData.error === "El nombre de la asociación ya está en uso.") {
-                alert("El nombre de la asociación ya existe. Por favor, elige otro nombre.");
-            } else {
-                alert(ERROR_MESSAGES.FETCH_ERROR);
-            }
-            return;
+        if (response.ok) {
+            alert(SUCCESS_MESSAGES.ASSOCIATION_UPDATED);
+            const modal = bootstrap.Modal.getInstance(document.getElementById("editAssociationModal"));
+            modal.hide();
+            document.getElementById("editAssociationForm").reset();
+            location.reload();
+        } else {
+            console.error("Error al actualizar la asociación:", response.status, await response.text());
+            alert(ERROR_MESSAGES.FETCH_ERROR);
         }
-
-        alert(SUCCESS_MESSAGES.ASSOCIATION_UPDATED);
-        const modal = bootstrap.Modal.getInstance(document.getElementById("editAssociationModal"));
-        modal.hide();
-        document.getElementById("editAssociationForm").reset();
-        location.reload();
     } catch (error) {
         console.error("Error inesperado durante la actualización de la asociación:", error);
         alert(ERROR_MESSAGES.FETCH_ERROR);
     }
 });
-
 
 document.getElementById("logoutLink").addEventListener("click", () => {
     logout();
@@ -350,27 +343,49 @@ async function updatePassword(currentPassword, newPassword) {
 }
 
 async function updateProfile(newUsername, currentPassword, newPassword) {
-    if (!newUsername && !newPassword) {
+    if (!newUsername && (!currentPassword || !newPassword)) {
         alert("Debe ingresar un nuevo nombre de usuario o una nueva contraseña.");
         return;
     }
 
     try {
-        if (newUsername) {
-            await updateUsername(newUsername);
-        }
-
-        // Update password if provided
+        // Construye el cuerpo de la petición dinámicamente
+        const payload = {};
+        if (newUsername) payload.newUsername = newUsername;
         if (currentPassword && newPassword) {
-            await updatePassword(currentPassword, newPassword);
+            payload.currentPassword = currentPassword;
+            payload.newPassword = newPassword;
         }
 
-        alert(SUCCESS_MESSAGES.PROFILE_UPDATED);
+        const response = await fetch(`${AUTH_URLS.UPDATE_PROFILE}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const responseData = await response.text();
+
+        if (!response.ok) {
+            if (responseData.includes("ya está en uso")) {
+                alert("El nombre de usuario ya existe. Por favor, elige otro.");
+            } else if (responseData.includes("Contraseña actual es incorrecta")) {
+                alert("La contraseña actual es incorrecta.");
+            } else {
+                alert("Error al actualizar el perfil. Inténtalo nuevamente.");
+            }
+            return;
+        }
+
+        alert("Perfil actualizado correctamente.");
         const modal = bootstrap.Modal.getInstance(document.getElementById("editProfileModal"));
         modal.hide();
+        document.getElementById("editProfileForm").reset();
     } catch (error) {
         console.error("Error inesperado al actualizar el perfil:", error);
-        alert(ERROR_MESSAGES.FETCH_ERROR);
+        alert("Ocurrió un error. Inténtalo más tarde.");
     }
 }
 
@@ -381,6 +396,7 @@ document.getElementById("updateProfileButton").addEventListener("click", () => {
 
     updateProfile(newUsername, currentPassword, newPassword);
 });
+
 
 
 document.getElementById("editProfileModal").addEventListener("hidden.bs.modal", () => {

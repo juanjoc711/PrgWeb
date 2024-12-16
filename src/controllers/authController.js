@@ -97,9 +97,46 @@ const changePassword = async (req, res) => {
   }
 };
 
+// Actualizar perfil: nombre de usuario o contraseña
+const updateProfile = async (req, res) => {
+  try {
+      const { newUsername, currentPassword, newPassword } = req.body;
+
+      const user = await User.findById(req.user.id);
+      if (!user) {
+          return res.status(404).send(messages.errors.USER_NOT_FOUND);
+      }
+
+      // Validar y actualizar el nombre de usuario
+      if (newUsername) {
+          const existingUser = await User.findOne({ username: newUsername });
+          if (existingUser) {
+              return res.status(400).send(messages.errors.USERNAME_TAKEN);
+          }
+          user.username = newUsername;
+      }
+
+      // Validar y actualizar la contraseña
+      if (currentPassword && newPassword) {
+          const isMatch = await bcrypt.compare(currentPassword, user.password);
+          if (!isMatch) {
+              return res.status(400).send(messages.errors.INVALID_PASSWORD);
+          }
+          user.password = await bcrypt.hash(newPassword, 10);
+      }
+
+      await user.save();
+      res.status(200).send("Perfil actualizado correctamente.");
+  } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
+      res.status(500).send("Error interno del servidor.");
+  }
+};
+
 export {
   register,
   login,
   changeUsername,
   changePassword,
+  updateProfile,
 };

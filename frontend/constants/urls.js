@@ -5,6 +5,7 @@ export const AUTH_URLS = {
     LOGIN: `${BASE_URL}/auth/login`,
     CHANGE_USERNAME: `${BASE_URL}/auth/change-username`,
     CHANGE_PASSWORD: `${BASE_URL}/auth/change-password`,
+    UPDATE_PROFILE: `${BASE_URL}/auth/profile`
 };
 
 export const ASSOCIATION_URLS = {
