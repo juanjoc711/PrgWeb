@@ -49,8 +49,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <td>${assoc.name}</td>
                 <td>${assoc.description}</td>
                 <td>
-                    <button class="btn btn-info btn-sm" data-id="${assoc.id}" data-action="view">👁️ Ver</button>
-                    <button class="btn btn-danger btn-sm" data-id="${assoc.id}" data-action="leave">❌ Abandonar</button>
+                    <button class="btn btn-info btn-sm" data-id="${assoc._id}" data-action="view">👁️ Ver</button>
+                    <button class="btn btn-danger btn-sm" data-id="${assoc._id}" data-action="leave">❌ Abandonar</button>
                 </td>
             `;
             tableBody.appendChild(row);
