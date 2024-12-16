@@ -203,20 +203,27 @@ document.getElementById("createAssociationForm").addEventListener("submit", asyn
             body: formData,
         });
 
-        if (response.ok) {
-            alert(SUCCESS_MESSAGES.ASSOCIATION_CREATED);
-            const modal = bootstrap.Modal.getInstance(document.getElementById("createAssociationModal"));
-            modal.hide();
-            location.reload();
-        } else {
-            console.error("Error al crear la asociación:", response.status, await response.text());
-            alert(ERROR_MESSAGES.FETCH_ERROR);
+        const responseData = await response.json();
+
+        if (!response.ok) {
+            if (responseData.error === "El nombre de la asociación ya está en uso.") {
+                alert("El nombre de la asociación ya existe. Por favor, elige otro nombre.");
+            } else {
+                alert(ERROR_MESSAGES.FETCH_ERROR);
+            }
+            return;
         }
+
+        alert(SUCCESS_MESSAGES.ASSOCIATION_CREATED);
+        const modal = bootstrap.Modal.getInstance(document.getElementById("createAssociationModal"));
+        modal.hide();
+        location.reload();
     } catch (error) {
         console.error("Error inesperado durante la creación de la asociación:", error);
         alert(ERROR_MESSAGES.FETCH_ERROR);
     }
 });
+
 
 // Handle Edit Association Form Submission
 document.getElementById("editAssociationForm").addEventListener("submit", async (event) => {
@@ -247,21 +254,28 @@ document.getElementById("editAssociationForm").addEventListener("submit", async 
             body: formData,
         });
 
-        if (response.ok) {
-            alert(SUCCESS_MESSAGES.ASSOCIATION_UPDATED);
-            const modal = bootstrap.Modal.getInstance(document.getElementById("editAssociationModal"));
-            modal.hide();
-            document.getElementById("editAssociationForm").reset();
-            location.reload();
-        } else {
-            console.error("Error al actualizar la asociación:", response.status, await response.text());
-            alert(ERROR_MESSAGES.FETCH_ERROR);
+        const responseData = await response.json();
+
+        if (!response.ok) {
+            if (responseData.error === "El nombre de la asociación ya está en uso.") {
+                alert("El nombre de la asociación ya existe. Por favor, elige otro nombre.");
+            } else {
+                alert(ERROR_MESSAGES.FETCH_ERROR);
+            }
+            return;
         }
+
+        alert(SUCCESS_MESSAGES.ASSOCIATION_UPDATED);
+        const modal = bootstrap.Modal.getInstance(document.getElementById("editAssociationModal"));
+        modal.hide();
+        document.getElementById("editAssociationForm").reset();
+        location.reload();
     } catch (error) {
         console.error("Error inesperado durante la actualización de la asociación:", error);
         alert(ERROR_MESSAGES.FETCH_ERROR);
     }
 });
+
 
 document.getElementById("logoutLink").addEventListener("click", () => {
     logout();

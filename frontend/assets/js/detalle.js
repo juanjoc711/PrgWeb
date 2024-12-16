@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Cargar mensajes del chat
         loadChatMessages();
+        // Actualizar el chat automáticamente cada 5 segundos
+        setInterval(loadChatMessages, 5000);
     } catch (error) {
         console.error(error);
         alert(ERROR_MESSAGES.FETCH_ERROR);
@@ -48,6 +50,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Cargar mensajes del chat
 async function loadChatMessages() {
     try {
+        const tokenPayload = getDecodedToken(); // Asegura obtener el token decodificado
+        if (!tokenPayload) {
+            console.error("Token inválido o no encontrado.");
+            return;
+        }
+
         const response = await fetch(ASSOCIATION_URLS.MESSAGES(associationId), {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -65,36 +73,48 @@ async function loadChatMessages() {
 
         messages.forEach((msg) => {
             const messageElement = document.createElement("div");
-            messageElement.className = "chat-message mb-2";
+            messageElement.className = `chat-message mb-2 ${
+                msg.author._id === tokenPayload.id ? "text-end" : ""
+            }`;
             messageElement.innerHTML = `
                 <strong>${msg.author.username}</strong>: ${msg.content}
             `;
             chatBox.appendChild(messageElement);
         });
+
+        // Desplazar al último mensaje
+        chatBox.scrollTop = chatBox.scrollHeight;
     } catch (error) {
-        console.error(error);
+        console.error("Error al cargar mensajes:", error);
         alert(ERROR_MESSAGES.FETCH_ERROR);
     }
 }
 
+
 document.getElementById("chatForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const message = document.getElementById("chatMessage").value;
+    const message = document.getElementById("chatMessage").value.trim();
 
-    if (!message.trim()) return;
+    // Validar mensaje vacío
+    if (!message) {
+        alert("Por favor, escribe un mensaje antes de enviarlo.");
+        return;
+    }
 
     try {
-        const response = await fetch(`${ASSOCIATION_URLS.LIST}/${associationId}/messages`, {
+        const response = await fetch(ASSOCIATION_URLS.MESSAGES(associationId), {
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
+            body: JSON.stringify({ content: message }),
         });
-
 
         if (response.ok) {
             document.getElementById("chatMessage").value = "";
-            loadChatMessages(); // Recargar mensajes
+            loadChatMessages(); // Recargar mensajes después de enviar
         } else {
             alert(ERROR_MESSAGES.FETCH_ERROR);
         }
@@ -104,3 +124,7 @@ document.getElementById("chatForm").addEventListener("submit", async (e) => {
     }
 });
 
+//volver a vista general asocis
+document.getElementById("backToGeneralBtn").addEventListener("click", () => {
+    location.href = "./general.html";
+});

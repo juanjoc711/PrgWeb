@@ -1,0 +1,97 @@
+/* Estilo general del cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Fondo claro */
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo de la cabecera */
+header {
+    background-color: #6c757d; /* Gris oscuro */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Título dentro del header */
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Contenedor principal */
+.container {
+    margin-top: 20px;
+}
+
+/* Tabla */
+.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background-color: #343a40; /* Fondo oscuro */
+    color: white;
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Botones */
+.btn {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    margin: 2px;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Imágenes de las asociaciones */
+.img-thumbnail {
+    border: none;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Mensajes vacíos */
+.empty-message {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    margin-top: 20px;
+}
+
+#backToGeneralBtn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#backToGeneralBtn:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}

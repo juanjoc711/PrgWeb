@@ -33,6 +33,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 });
 
 // Manejo de registro
+// Manejo de registro
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -48,8 +49,15 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
             body: JSON.stringify({ username, password }),
         });
 
+        const responseData = await response.text(); // Lee la respuesta como texto
+
         if (!response.ok) {
-            alert(ERROR_MESSAGES.REGISTER_FAILED);
+            if (responseData === "Nombre de usuario ya está en uso" || 
+                responseData === "El nombre de usuario ya está en uso.") {
+                alert(ERROR_MESSAGES.USERNAME_TAKEN); // Mensaje específico
+            } else {
+                alert(ERROR_MESSAGES.REGISTER_FAILED); // Otro error general
+            }
             return;
         }
 

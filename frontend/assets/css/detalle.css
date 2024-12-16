@@ -25,3 +25,9 @@
     border-radius: 5px;
     background-color: #e9ecef;
 }
+.chat-message.text-end {
+    text-align: right;
+    background-color: #d1e7dd;
+    padding: 5px;
+    border-radius: 10px;
+}

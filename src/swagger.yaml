@@ -1,0 +1,370 @@
+openapi: 3.0.0
+info:
+  title: Mi API
+  description: Documentación completa de la API.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Autenticación
+    description: Endpoints para la autenticación de usuarios.
+  - name: Asociaciones
+    description: Gestión de asociaciones.
+  - name: Mensajes
+    description: Gestión de mensajes asociados a asociaciones.
+
+paths:
+  /associations:
+    post:
+      tags:
+        - Asociaciones
+      summary: Crear una nueva asociación
+      security:
+        - bearerAuth: []
+      description: Crea una nueva asociación con una imagen opcional.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nombre de la asociación.
+                description:
+                  type: string
+                  description: Descripción de la asociación.
+                image:
+                  type: string
+                  format: binary
+                  description: Imagen opcional de la asociación.
+      responses:
+        '201':
+          description: Asociación creada exitosamente.
+        '400':
+          description: Faltan campos obligatorios.
+        '500':
+          description: Error interno.
+
+    get:
+      tags:
+        - Asociaciones
+      summary: Listar todas las asociaciones
+      description: Devuelve una lista de todas las asociaciones.
+      responses:
+        '200':
+          description: Lista de asociaciones.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Association'
+
+  /associations/{id}:
+    get:
+      tags:
+        - Asociaciones
+      summary: Obtener una asociación por ID
+      description: Devuelve los detalles de una asociación específica.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+      responses:
+        '200':
+          description: Detalles de la asociación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Association'
+        '404':
+          description: Asociación no encontrada.
+
+    put:
+      tags:
+        - Asociaciones
+      summary: Actualizar una asociación
+      security:
+        - bearerAuth: []
+      description: Actualiza los detalles de una asociación.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Asociación actualizada.
+        '404':
+          description: Asociación no encontrada.
+        '500':
+          description: Error interno.
+
+    delete:
+      tags:
+        - Asociaciones
+      summary: Eliminar una asociación
+      security:
+        - bearerAuth: []
+      description: Elimina una asociación por ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Asociación eliminada exitosamente.
+        '403':
+          description: No tienes permisos para eliminar esta asociación.
+        '404':
+          description: Asociación no encontrada.
+
+  /associations/{id}/messages:
+    get:
+      tags:
+        - Mensajes
+      summary: Obtener mensajes de una asociación
+      security:
+        - bearerAuth: []
+      description: Devuelve todos los mensajes asociados a una asociación específica.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+      responses:
+        '200':
+          description: Lista de mensajes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '404':
+          description: Asociación no encontrada.
+        '500':
+          description: Error interno.
+
+    post:
+      tags:
+        - Mensajes
+      summary: Crear un mensaje en una asociación
+      security:
+        - bearerAuth: []
+      description: Crea un nuevo mensaje asociado a una asociación.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Contenido del mensaje.
+      responses:
+        '201':
+          description: Mensaje creado exitosamente.
+        '404':
+          description: Asociación no encontrada.
+        '500':
+          description: Error interno.
+
+  /associations/{id}/messages/{messageId}:
+    get:
+      tags:
+        - Mensajes
+      summary: Obtener un mensaje específico
+      security:
+        - bearerAuth: []
+      description: Devuelve los detalles de un mensaje específico dentro de una asociación.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+        - in: path
+          name: messageId
+          required: true
+          schema:
+            type: string
+            description: ID del mensaje.
+      responses:
+        '200':
+          description: Detalles del mensaje.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Mensaje no encontrado.
+        '500':
+          description: Error interno.
+
+    put:
+      tags:
+        - Mensajes
+      summary: Actualizar un mensaje
+      security:
+        - bearerAuth: []
+      description: Actualiza el contenido de un mensaje específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+        - in: path
+          name: messageId
+          required: true
+          schema:
+            type: string
+            description: ID del mensaje.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Contenido del mensaje actualizado.
+      responses:
+        '200':
+          description: Mensaje actualizado.
+        '403':
+          description: No tienes permisos para actualizar este mensaje.
+        '404':
+          description: Mensaje no encontrado.
+        '500':
+          description: Error interno.
+
+    delete:
+      tags:
+        - Mensajes
+      summary: Eliminar un mensaje
+      security:
+        - bearerAuth: []
+      description: Elimina un mensaje específico dentro de una asociación.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: ID de la asociación.
+        - in: path
+          name: messageId
+          required: true
+          schema:
+            type: string
+            description: ID del mensaje.
+      responses:
+        '200':
+          description: Mensaje eliminado exitosamente.
+        '403':
+          description: No tienes permisos para eliminar este mensaje.
+        '404':
+          description: Mensaje no encontrado.
+        '500':
+          description: Error interno.
+
+components:
+  schemas:
+    Association:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Nombre de la asociación.
+        description:
+          type: string
+          description: Descripción de la asociación.
+        createdBy:
+          type: string
+          description: ID del usuario que creó la asociación.
+        members:
+          type: array
+          items:
+            type: string
+            description: IDs de los miembros de la asociación.
+        image:
+          type: string
+          description: URL de la imagen de la asociación.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+          description: Contenido del mensaje.
+        author:
+          type: string
+          description: ID del usuario que creó el mensaje.
+        association:
+          type: string
+          description: ID de la asociación a la que pertenece el mensaje.
+        createdAt:
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+          description: Nombre del usuario.
+        role:
+          type: string
+          enum: [admin, user]
+          description: Rol del usuario.

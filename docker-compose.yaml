@@ -35,7 +35,7 @@ services:
     image: mongo:5
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "27020:27017"
     networks:
       - app-network
     volumes:

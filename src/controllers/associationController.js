@@ -3,13 +3,17 @@ import Association from '../models/Association.js';
 // Crear una nueva asociación
 const createAssociation = async (req, res) => {
     try {
-        //console.log("Cuerpo recibido:", req.body);
-        //console.log("Archivo recibido:", req.file);
         const { name, description } = req.body;
 
         // Validar campos obligatorios
         if (!name || !description) {
             return res.status(400).json({ error: "El nombre y la descripción son obligatorios" });
+        }
+
+        // Validar si ya existe una asociación con el mismo nombre
+        const existingAssociation = await Association.findOne({ name });
+        if (existingAssociation) {
+            return res.status(400).json({ error: "El nombre de la asociación ya está en uso." });
         }
 
         // Procesar la imagen si existe
@@ -57,25 +61,41 @@ const listAssociations = async (req, res) => {
 // Actualizar una asociación
 const updateAssociation = async (req, res) => {
     try {
-        console.log(req.user);
-        const association = await Association.findById(req.params.id);
+        const { name, description } = req.body;
+        const associationId = req.params.id;
+
+        // Verificar si la asociación existe
+        const association = await Association.findById(associationId);
         if (!association) {
-            return res.status(404).send('Asociación no encontrada');
+            return res.status(404).json({ error: 'Asociación no encontrada' });
         }
-        console.log(req.body);
 
-        if(req.user.role === "admin" || association.createdBy.toString() === req.user.id){
-            const { name, description } = req.body;
-            const image = req.file ? `/uploads/${req.file.filename}` : association.image;
-
-            const updated = await Association.findByIdAndUpdate(req.params.id, { name, description, image }, { new: true });
-            console.log(updated);
-            res.status(200).json(updated);
-        } else {
-            return res.status(403).send('No tienes permisos para editar esta asociación');
+        // Validar permisos (solo el creador o admin pueden editar)
+        if (req.user.role !== "admin" && association.createdBy.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'No tienes permisos para editar esta asociación' });
         }
+
+        // Validar si el nuevo nombre ya está en uso por otra asociación
+        if (name && name !== association.name) {
+            const existingAssociation = await Association.findOne({ name });
+            if (existingAssociation) {
+                return res.status(400).json({ error: "El nombre de la asociación ya está en uso." });
+            }
+        }
+
+        // Procesar imagen si existe
+        const image = req.file ? `/uploads/${req.file.filename}` : association.image;
+
+        // Actualizar asociación
+        association.name = name || association.name;
+        association.description = description || association.description;
+        association.image = image;
+
+        await association.save();
+        res.status(200).json(association);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error("Error en updateAssociation:", error);
+        res.status(500).json({ error: error.message });
     }
 };
 
