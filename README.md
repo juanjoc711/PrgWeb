@@ -1,5 +1,8 @@
 
 # 📚 **Gestor de Asociaciones Universitarias**
+Esta aplicación permite la gestión de **asociaciones universitarias** facilitando la creación, administración y participación en asociaciones. Además, cuenta con un **sistema de chat** implementado para que los usuarios puedan comunicarse en tiempo real dentro de las asociaciones.
+---
+
 ## 📖 **Índice**
 
 1. [🚀 Características Principales](#-características-principales)
@@ -9,19 +12,18 @@
    - [Diagrama de Arquitectura](#diagrama-de-arquitectura)
 4. [📂 Estructura del Proyecto](#-estructura-del-proyecto)
    - [📂 Backend (src)](#-backend-src)
-   - [📂 Frontend (frontend)](#-frontend-frontend)
-   - [🗂️ Documentación de API con Swagger](#documentación-de-api-con-swagger)
-5. [🛢️ Estructura de la Base de Datos](#estructura-de-la-base-de-datos)
+   - [🗂️ Documentación de la API con Swagger](#-documentación-de-la-api-con-swagger)
+   - [🎨 Frontend (frontend)](#-frontend-frontend)
+6. [🛢️ Estructura de la Base de Datos](#estructura-de-la-base-de-datos)
    - [📄 Users](#-users)
    - [📄 Associations](#-associations)
    - [📄 Messages](#-messages)
    - [📊 Relaciones entre las colecciones](#-relaciones-entre-las-colecciones)
-6. [📝 Contribución](#-contribución)
-7. [🚀 Autor](#-autor)
+7. [📝 Contribución](#-contribución)
+8. [🚀 Autor](#-autor)
 
 ---
 
-Esta aplicación permite la gestión de **asociaciones universitarias** facilitando la creación, administración y participación en asociaciones. Además, cuenta con un **sistema de chat** implementado para que los usuarios puedan comunicarse en tiempo real dentro de las asociaciones.
 
 ## 🚀 **Características Principales**
 1. **Autenticación y Gestión de Usuarios**:
@@ -104,7 +106,7 @@ La aplicación sigue una arquitectura **cliente-servidor** con **separación de 
 
 ---
 
-# Estructura del Proyecto
+# 📂 Estructura del Proyecto
 
 Este repositorio contiene el **frontend** y el **backend** de una aplicación web para la gestión de asociaciones y mensajes. A continuación se detalla la estructura del proyecto.
 
@@ -157,7 +159,7 @@ src/
 
 
 
-## 🗂️ **Documentación de API con Swagger**
+##  ** 🗂️ Documentación de la API con Swagger **
 
 Puedes consultar la documentación completa de la API en la siguiente URL una vez que el backend esté corriendo:
 
