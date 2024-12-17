@@ -12,7 +12,7 @@ Esta aplicación permite la gestión de **asociaciones universitarias** facilita
    - [Diagrama de Arquitectura](#diagrama-de-arquitectura)
 4. [📂 Estructura del Proyecto](#-estructura-del-proyecto)
    - [📂 Backend (src)](#-backend-src)
-   - [Documentación de la API con Swagger ](#-documentación-de-la-api-con-swagger)
+   - [🗂️ Documentación de la API con Swagger ](#-documentación-de-la-api-con-swagger)
    - [🎨 Frontend (frontend)](#-frontend-frontend)
 6. [🛢️ Estructura de la Base de Datos](#estructura-de-la-base-de-datos)
    - [📄 Users](#-users)
