@@ -1,5 +1,25 @@
 
 # 📚 **Gestor de Asociaciones Universitarias**
+## 📖 **Índice**
+
+1. [🚀 Características Principales](#-características-principales)
+2. [💻 Requisitos y Configuración](#-requisitos-y-configuración)
+   - [Cómo Ejecutar la Aplicación con Docker](#cómo-ejecutar-la-aplicación-con-docker)
+3. [🛠️ Tecnologías y Arquitectura](#️-tecnologías-y-arquitectura)
+   - [Diagrama de Arquitectura](#diagrama-de-arquitectura)
+4. [📂 Estructura del Proyecto](#-estructura-del-proyecto)
+   - [📂 Backend (src)](#-backend-src)
+   - [📂 Frontend (frontend)](#-frontend-frontend)
+   - [🗂️ Documentación de API con Swagger](#documentación-de-api-con-swagger)
+5. [🛢️ Estructura de la Base de Datos](#estructura-de-la-base-de-datos)
+   - [📄 Users](#-users)
+   - [📄 Associations](#-associations)
+   - [📄 Messages](#-messages)
+   - [📊 Relaciones entre las colecciones](#-relaciones-entre-las-colecciones)
+6. [📝 Contribución](#-contribución)
+7. [🚀 Autor](#-autor)
+
+---
 
 Esta aplicación permite la gestión de **asociaciones universitarias** facilitando la creación, administración y participación en asociaciones. Además, cuenta con un **sistema de chat** implementado para que los usuarios puedan comunicarse en tiempo real dentro de las asociaciones.
 
