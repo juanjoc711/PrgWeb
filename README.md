@@ -8,13 +8,14 @@ Esta aplicación permite la gestión de **asociaciones universitarias** facilita
    - Registro de usuarios.
    - Inicio de sesión seguro con JWT.
    - Posibilidad de cambiar el nombre de usuario y contraseña.
+   - Distinción entre usuario administrador (rol puesto directamente en la base de datos) y resto de usuarios (con rol de user).
 
 2. **Gestión de Asociaciones**:
-   - Creación, visualización, edición y eliminación de asociaciones.
+   - Creación, visualización, edición y eliminación de asociaciones (estas dos últimas solo si las ha creado ese usuario o si es el administrador).
    - Los usuarios pueden unirse o abandonar asociaciones.
 
 3. **Foro/Chat de Asociaciones**:
-   - Los usuarios pueden enviar mensajes en las asociaciones a las que pertenecen.
+   - Los usuarios pueden enviar mensajes en las asociaciones a las que pertenecen y visualizar los mensajes de otros usuarios.
    - **Extensibilidad**: El backend ya cuenta con las funcionalidades para editar, borrar y actualizar mensajes, pero estas características aún no están desarrolladas en el frontend. Actualmente, los mensajes son permanentes.
 
 ---
@@ -141,6 +142,62 @@ src/
 Puedes consultar la documentación completa de la API en la siguiente URL una vez que el backend esté corriendo:
 
 📄 **Swagger UI**: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+---
+## Estructura de la Base de Datos
+
+La base de datos está compuesta por tres colecciones principales: **Users**, **Associations** y **Messages**. A continuación, se describen los campos y relaciones.
+
+### 📄 Users
+La colección **Users** almacena la información de los usuarios registrados en el sistema.
+
+| **Campo**   | **Tipo**         | **Descripción**                                  |
+|-------------|------------------|--------------------------------------------------|
+| `_id`       | `ObjectId`       | Identificador único del usuario.                 |
+| `username`  | `String`         | Nombre del usuario.                              |
+| `password`  | `String`         | Contraseña cifrada del usuario.                  |
+| `role`      | `String`         | Rol del usuario. Valores posibles: `user`, `admin`. |
+| `__v`       | `Number`         | Versión del documento (interno de MongoDB).      |
+
+---
+
+### 📄 Associations
+La colección **Associations** almacena las asociaciones creadas por los usuarios.
+
+| **Campo**     | **Tipo**         | **Descripción**                                  |
+|---------------|------------------|--------------------------------------------------|
+| `_id`         | `ObjectId`       | Identificador único de la asociación.            |
+| `name`        | `String`         | Nombre de la asociación.                         |
+| `description` | `String`         | Descripción de la asociación.                    |
+| `createdBy`   | `ObjectId`       | ID del usuario que creó la asociación.           |
+| `members`     | `Array<ObjectId>`| IDs de los usuarios miembros de la asociación.   |
+| `image`       | `String`         | URL de la imagen asociada (opcional).            |
+| `createdAt`   | `DateTime`       | Fecha de creación de la asociación.              |
+| `updatedAt`   | `DateTime`       | Fecha de última actualización.                   |
+| `__v`         | `Number`         | Versión del documento (interno de MongoDB).      |
+
+---
+
+### 📄 Messages
+La colección **Messages** almacena los mensajes creados en las asociaciones.
+
+| **Campo**     | **Tipo**         | **Descripción**                                  |
+|---------------|------------------|--------------------------------------------------|
+| `_id`         | `ObjectId`       | Identificador único del mensaje.                 |
+| `content`     | `String`         | Contenido del mensaje.                           |
+| `author`      | `ObjectId`       | ID del usuario que creó el mensaje.              |
+| `association` | `ObjectId`       | ID de la asociación a la que pertenece el mensaje.|
+| `createdAt`   | `DateTime`       | Fecha de creación del mensaje.                   |
+| `__v`         | `Number`         | Versión del documento (interno de MongoDB).      |
+
+---
+
+### 📊 Relaciones entre las colecciones
+
+- **Users → Associations**: Un usuario puede **crear** múltiples asociaciones (`createdBy`) y ser miembro de otras asociaciones (`members`).
+- **Users → Messages**: Un usuario puede **crear** múltiples mensajes (`author`).
+- **Associations → Messages**: Una asociación puede contener múltiples mensajes (`association`).
+
+
 ---
 
 ## 🎨 **Frontend (frontend)**  
